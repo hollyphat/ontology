@@ -1,19 +1,19 @@
 <template>
-    <div class="page" data-name="chat-home">        
+    <div class="page" data-name="saved">        
         <div class="navbar">
             <div class="navbar-inner">
                 <div class="left">
-                    <a class="link icon-only searchbar-enable" data-searchbar=".searchbar-demo">
-                        <i class="icon f7-icons ios-only">search_strong</i>
-                        <i class="icon material-icons md-only">search</i>
+                    <a href="/" class="link back">
+                        <i class="icon icon-back"></i>
+                        <span class="ios-only">Back</span>
                     </a>
                 </div>
-                <div class="title">Mobile Ontology</div>
-                <div class="right">
-                      <a href="#" class="link icon-only panel-open" data-panel="left">
-                        <i class="icon f7-icons ios-only">menu</i>
-                        <i class="icon material-icons md-only">menu</i>
-                      </a>
+                <div class="title">Saved Herbs</div>
+                <div class="right">                        
+                        <a class="link icon-only searchbar-enable" data-searchbar=".searchbar-demo">
+                            <i class="icon f7-icons ios-only">search_strong</i>
+                            <i class="icon material-icons md-only">search</i>
+                        </a>
                 </div>
                 
                 
@@ -31,15 +31,14 @@
 
         
       </div>
-        <div class="page-content">
-            <div class="block-title">Welcome {{user_name}}</div>
+        <div class="page-content">            
             <div class="searchbar-backdrop"></div>
                 <div class="list simple-list searchbar-not-found">
                     <ul>
                         <li>Nothing found</li>
                     </ul>
                 </div>
-                <div class="list search-list searchbar-found list media-list all-student-lists">
+                <div class="list search-list searchbar-found list media-list all-herb-lists">
 
                 </div>
         </div>
@@ -64,22 +63,12 @@
                     return;
                 }
 
-                document.addEventListener("backbutton", onBackKeyDown, false);
-
-                function onBackKeyDown() {
-                    app.dialog.confirm('Are you sure you want exit?', function () {
-                        //window.plugins.appMinimize.minimize();
-                        //cordova.plugins.exit();
-                        navigator.app.exitApp();
-                    });
-                    // Handle the back button
-                    
-                }
+                
 
 
-                var herbs = sessionStorage.getItem("herbs");
+                var herbs = sessionStorage.getItem("saved_herbs");
                 herbs = JSON.parse(herbs);
-                var htmls = "<div class='block-title'>All Herbs</div><ul>";
+                var htmls = "<div class='block-title'>Saved Herbs</div><ul>";
                                             
                 for(var i = 0; i < herbs.length; i++){
                     var user_name = herbs[i].title;
@@ -95,33 +84,15 @@
 
                 //console.log(htmls);
 
-                $(".all-student-lists").html(htmls);
+                $(".all-herb-lists").html(htmls);
 
 
-                $(".logout").on("click",function(){
-                    app.dialog.confirm('Are you sure you want to logout?', function () {
-                        sessionStorage.removeItem("user_id");
-                        sessionStorage.removeItem("herbs");
-                        sessionStorage.removeItem("name");
-                        sessionStorage.removeItem("email");
-                        sessionStorage.removeItem("phone");
-                        sessionStorage.removeItem("gender");
-                        sessionStorage.removeItem("saved_herbs");
-                        
-                        mainView.router.navigate("/login/",{});
-                    });
-                });
+                
 
                 //clearInterval(myTimers);
 
                 
                 //updateStats();
-
-                var herbs_list = sessionStorage.getItem("herbs");
-
-
-                var herbs = JSON.parse(herbs_list);
-                
 
                 //console.log(herbs);
 

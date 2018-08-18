@@ -1,19 +1,19 @@
 <template>
         <div class="page no-toolbar no-navbar no-swipeback" data-name="login">
-            <div class="page-content login-screen-content login-page" style="padding-top: 25px;">
+            <div class="page-content login-screen-content login-page" style="padding-top: 45px;">
                 <!--<div class="login-screen-title">Mobile Year Book</div>-->
                 <form class="login-form">
-                    <p align="cener" style="text-align: center">
-                        <img src="img/icon.png" alt="" class="img-responsive">
-                    </p>
+                    <h3 class="logo-text">Mobile Ontology</h3>
+
+                    <h5 class="center">Login to your user account</h5>
                     <div class="list">
                         <ul>
                             <li class="item-content item-input item-input-with-value">
-                                <div class="item-media"><i class="icon material-icons">person</i></div>
+                                <div class="item-media"><i class="icon material-icons">envelope</i></div>
                                 <div class="item-inner">
-                                    <div class="item-title item-label">Username</div>
+                                    <div class="item-title item-label">Email Address</div>
                                     <div class="item-input-wrap">
-                                        <input type="text" required validate placeholder="Username" id="user-email" class="input-with-value user-email">
+                                        <input type="email" required validate placeholder="Email Address" id="user-email" class="input-with-value user-email">
                                         <span class="input-clear-button"></span>
                                     </div>
                                 </div>
@@ -71,13 +71,13 @@
                         e.preventDefault();
                         var router = this.$router;
     
-                        var username = $(".user-email").val();
+                        var email = $(".user-email").val();
                         var password = $(".user-password").val();
                         
-                        if (username == "" || password == "") {
+                        if (email == "" || password == "") {
                             
                             app.toast.create({
-                                text: 'Please fill all fields',
+                                text: 'All fields are required',
                                 position: 'bottom',
                                 closeTimeout: 3000
                             }).open();                        
@@ -98,7 +98,7 @@
                             timeout: 45000,
                             data: {
                                 'login-ok': '',
-                                'username': username,
+                                'email': email,
                                 'password': password
                             },
                             success: function(f) {
@@ -114,20 +114,16 @@
                                     $("#loader").addClass('hide');
                                 }else {
                                     //console.log(f.datas);
-                                    var rooms = JSON.stringify(f.rooms);
-                                    var chats_lists = JSON.stringify(f.chats_lists);
+                                    var herbs = JSON.stringify(f.herbs);
+                                    var saved_herbs = JSON.stringify(f.saved_herbs);
                                     //console.log(chats_lists);
-                                    sessionStorage.setItem("chats_lists",chats_lists);
+                                    sessionStorage.setItem("herbs",herbs);
                                     sessionStorage.setItem("user_id", f.datas['id']);
-                                    sessionStorage.setItem("username", f.datas['username']);
                                     sessionStorage.setItem("name", f.datas['names']);
                                     sessionStorage.setItem("email", f.datas['email']);
                                     sessionStorage.setItem("phone", f.datas['phone']);
                                     sessionStorage.setItem("gender", f.datas['gender']);
-                                    sessionStorage.setItem("bio", f.datas['bio']);                                    
-                                    sessionStorage.setItem("image", f.datas['image']);
-                                    sessionStorage.setItem("requests", f.requests);
-                                    sessionStorage.setItem("room_lists",rooms)
+                                    sessionStorage.setItem("saved_herbs",saved_herbs);
                                     $("#signIn-btn").show();
                                     $("#loader").addClass('hide');
                                     mainView.router.navigate("/home/",{});

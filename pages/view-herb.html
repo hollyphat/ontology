@@ -1,0 +1,216 @@
+<template>
+  <div class="page">
+    <div class="navbar">
+        <div class="navbar-inner">
+            <div class="left sliding">
+                <a href="#" class="link back">
+                    <i class="icon icon-back"></i>
+                    <span class="ios-only">Back</span>
+                </a>
+            </div>
+            <div class="title sliding">{{$route.query.name}}</div>
+        </div>
+    </div>
+    <div class="page-content">
+        <div class="block">
+            <h3>{{$route.query.name}}</h3>
+        </div>
+
+        <div class="center padding">
+            <img src="" id="herb-img" class="img-responsive lazy hide">
+        </div>
+
+        <div class="card card-outlines hide result">
+            <div class="card-header">
+                {{$route.query.name}} - Description
+            </div>
+            <div class="card-content card-content-padding" id="herb-info">
+            </div>
+            <div class="card-footer">
+                <a href="" class="button" id="save-herb" style="display: none;">Save Herb</a>
+                <a href="" class="button" id="remove-herb" style="display: none;">Remove From Saved Herbs</a>
+            </div>
+        </div>
+
+        <input type="hidden" name="" id="herb_id" value="{{$route.query.id}}">
+        <div class="page-fixed-center">
+            <p class="center">
+                Network Error
+            </p>
+            <div class="row">
+                <div class="col-25">&nbsp;</div>
+                <div class="col-50">
+                    <a href="" class="button button-outline btn-retry-list button-round">Retry</a>
+                </div>
+                <div class="col-25">&nbsp;</div>
+            </div>
+        </div>
+    </div>
+</div>
+</template>
+
+<script>
+    return {        
+        on: {
+            pageInit: function() {
+                var app = this.$app;
+                var $$ = this.$;                
+                var router = this.$router;        
+                var user_id = sessionStorage.getItem("user_id");
+                if((user_id === "") || (user_id === null)){
+                    
+                    mainView.router.navigate('/login/');
+                }
+
+                var id = $("#herb_id").val();
+
+
+                load_request();
+
+                $("body").on("click",".page-fixed-center",function(e){
+                    e.preventDefault();
+                    load_request();
+                });
+
+
+                $("body").on("click","#save-herb",function(e){
+
+                    app.toast.create({
+                        text: 'Please wait',
+                        position: 'bottom',
+                        closeTimeout: 3000
+                    }).open();
+                    
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            'save': '',
+                            'user_id': sessionStorage.getItem("user_id"),
+                            'herb_id': $("#herb_id").val()
+                        },
+                        timeout: 30000,
+                        success: function(f){
+                            app.toast.create({
+                                text: 'Herb added to save herb lists',
+                                position: 'bottom',
+                                closeTimeout: 3000
+                            }).open();
+                            var saved_herbs = JSON.stringify(f.saved_herbs);
+                            sessionStorage.setItem("saved_herbs",saved_herbs);
+                            $("#save-herb").hide();
+                            $("#remove-herb").show();
+                        },
+                        error: function(er){
+                            app.toast.create({
+                                text: 'Network error, please ensure that you have active internet connections!',
+                                position: 'bottom',
+                                closeTimeout: 3000
+                            }).open();
+                        }
+                    });
+                    
+                });
+
+
+                $("body").on("click","#remove-herb",function(e){
+                    app.toast.create({
+                        text: 'Please wait',
+                        position: 'bottom',
+                        closeTimeout: 3000
+                    }).open();
+                    
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            'removed': '',
+                            'user_id': sessionStorage.getItem("user_id"),
+                            'herb_id': $("#herb_id").val()
+                        },
+                        timeout: 30000,
+                        success: function(f){
+                            app.toast.create({
+                                text: 'Herb removed from save herb lists',
+                                position: 'bottom',
+                                closeTimeout: 3000
+                            }).open();
+                            var saved_herbs = JSON.stringify(f.saved_herbs);
+                            sessionStorage.setItem("saved_herbs",saved_herbs);
+                            $("#remove-herb").hide();
+                            $("#save-herb").show();
+                        },
+                        error: function(er){
+                            app.toast.create({
+                                text: 'Network error, please ensure that you have active internet connections!',
+                                position: 'bottom',
+                                closeTimeout: 3000
+                            }).open();
+                        }
+                    });
+                });
+
+
+
+
+                function load_request(){
+                  $(".page-fixed-center").hide();
+                    app.preloader.show();
+
+                    $.ajax({
+                        url: url+"?load_herb&user_id="+sessionStorage.getItem("user_id")+"&id="+id,
+                        type: 'get',
+                        dataType: 'json',
+                        timeout: 45000,
+                        success: function(f){
+                            app.preloader.hide();
+                            //console.log(f);                            
+                            $(".result").removeClass("hide");
+                            var herb = f.herbs;
+                            var img = herb.image;
+                            if(img.length > 0){
+                                $("#herb-img").attr("src",base_url+"/admin/img/herbs/"+img).removeClass("hide");
+                            }
+                            $("#herb-info").html(herb.info);
+
+                            if(f.t == 1){
+                                $("#remove-herb").show();
+                            }else{
+                                $("#save-herb").show();
+                            }
+
+                        },
+                        error:function(e){
+                            app.preloader.hide();
+                            app.toast.create({
+                                    text: 'Network error, please ensure that you have active internet connections!',
+                                    position: 'bottom',
+                                    closeTimeout: 3000
+                            }).open();
+
+                            $(".page-fixed-center").show();
+                            console.log(e.responseText);
+                        }
+                    });
+                }
+
+                
+            }
+        },
+        data: function () {               
+     
+            
+        },
+
+        methods: {
+        setColorTheme: function (color) {          
+          var self = this;
+          var app = self.$app;
+                    
+        },
+      }
+        
+    }
+</script>
