@@ -269,3 +269,16 @@ code {
     display: none;
 
 }
+
+
+@font-face {
+    font-family: 'LogoFont';
+    src: url('../fonts/Bauhaus-Bold.otf') format("opentype");
+}
+
+.logo-text{
+    font-family: 'LogoFont';
+    color: #4caf50;
+    font-size: 2em;
+    text-align: center;
+}
