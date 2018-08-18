@@ -1,0 +1,154 @@
+<template>
+  <div class="page">
+    <div class="navbar">
+        <div class="navbar-inner">
+            <div class="left sliding">
+                <a href="#" class="link back">
+                    <i class="icon icon-back"></i>
+                    <span class="ios-only">Back</span>
+                </a>
+            </div>
+            <div class="title sliding">Friend Request</div>
+            <div class="right">
+                <a class="link icon-only searchbar-enable" data-searchbar=".searchbar-demo">
+                    <i class="icon f7-icons ios-only">search_strong</i>
+                    <i class="icon material-icons md-only">search</i>
+                </a>
+            </div>
+            <form data-search-container=".search-list" data-search-in=".item-title" class="searchbar searchbar-expandable searchbar-demo searchbar-init">
+                <div class="searchbar-inner">
+                    <div class="searchbar-input-wrap">
+                        <input type="search" placeholder="Search" />
+                        <i class="searchbar-icon"></i>
+                        <span class="input-clear-button"></span>
+                    </div>
+                    <span class="searchbar-disable-button">Cancel</span>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="page-content">
+        <div class="searchbar-backdrop"></div>
+        <div class="list simple-list searchbar-not-found">
+            <ul>
+                <li>Nothing found</li>
+            </ul>
+        </div>
+        <div class="list search-list searchbar-found list media-list all-student-lists">
+
+        </div>
+
+
+        <div class="page-fixed-center">
+            <p class="center">
+                Network Error
+            </p>
+            <div class="row">
+                <div class="col-25">&nbsp;</div>
+                <div class="col-50">
+                    <a href="" class="button button-outline btn-retry-list button-round">Retry</a>
+                </div>
+                <div class="col-25">&nbsp;</div>
+            </div>
+        </div>
+    </div>
+</div>
+</template>
+
+<script>
+    return {        
+        on: {
+            pageInit: function() {
+                var app = this.$app;
+                var $$ = this.$;                
+                var router = this.$router;        
+                var user_id = sessionStorage.getItem("user_id");
+                if((user_id === "") || (user_id === null)){
+                    
+                    mainView.router.navigate('/login/');
+                }
+
+
+                load_request();
+
+                $("body").on("click",".page-fixed-center",function(e){
+                    e.preventDefault();
+                    load_request();
+                });
+
+
+                function load_request(){
+                  $(".page-fixed-center").hide();
+                    app.preloader.show();
+
+                    $.ajax({
+                        url: url+"?my_request&user_id="+sessionStorage.getItem("user_id"),
+                        type: 'get',
+                        dataType: 'json',
+                        timeout: 45000,
+                        success: function(f){
+                            app.preloader.hide();
+                            //console.log(f);
+
+                            var students = f.students;
+                            var htmls = "<div class='block-title'>Friend Requests</div><ul>";
+                                                        
+                            for(var i = 0; i < students.length; i++){
+                                var img = server_upload_url+""+app_path+"users/thumb/"+students[i].image;
+                                var user_name = students[i].name;
+                                var username = students[i].username;
+                                var gender = students[i].gender;
+                                var phone = students[i].phone;
+                                var email = students[i].email;
+                                var id = students[i].id;
+                                var bio = students[i].bio;                                
+                                htmls += '<li>';
+                                htmls += '<a href="/requests-info/?user_name='+user_name+'&username='+username+'&gender='+gender+'&phone='+phone+'&email='+email+'&bio='+bio+'&image='+img+'&id='+id+'" class="item-link item-content">';                                
+                                htmls += '<div class="item-media students-img-li">';
+                                htmls += '<img src="'+img+'" class="img-responsive img-circle" width="70">';
+                                htmls += '</div>';
+                                htmls += '<div class="item-inner">';
+                                htmls += '<div class="item-title">'+students[i].name+'</div>';
+                                htmls += '</div></div></a></li>';
+                            }
+
+                            htmls += "</ul>";
+
+                            //console.log(htmls);
+
+                            $(".all-student-lists").html(htmls);
+
+                        },
+                        error:function(e){
+                            app.preloader.hide();
+                            app.toast.create({
+                                    text: 'Network error, please ensure that you have active internet connections!',
+                                    position: 'bottom',
+                                    closeTimeout: 3000
+                            }).open();
+
+                            $(".page-fixed-center").show();
+                            console.log(e.responseText);
+                        }
+                    });
+                }
+
+                
+            }
+        },
+        data: function () {               
+     
+            
+        },
+
+        methods: {
+        setColorTheme: function (color) {          
+          var self = this;
+          var app = self.$app;
+          localStorage.setItem("color_scheme",color);
+          updateColor();          
+        },
+      }
+        
+    }
+</script>

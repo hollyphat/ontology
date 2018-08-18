@@ -1,0 +1,222 @@
+<template>
+    <div class="page" data-name="chat-home">        
+        <div class="navbar">
+            <div class="navbar-inner">
+                <div class="left">
+                      <a href="#" class="link icon-only panel-open" data-panel="left">
+                        <i class="icon f7-icons ios-only">menu</i>
+                        <i class="icon material-icons md-only">menu</i>
+                      </a>
+                </div>
+                <div class="title sliding">{{user_name}}</div>
+                <div class="right">
+                    <a href="/requests/" class="link">
+                        <i class="icon material-icons md-only">person<span class="badge color-red badge-request">{{requests}}</span></i>
+                    </a>                    
+                </div>
+            </div>
+        </div>
+
+        <div class="toolbar tabbar">
+        <div class="toolbar-inner">
+          <a href="#tab-1" class="tab-link tab-link-active">Chats</a>
+          <a href="#tab-2" class="tab-link">Group Chats</a>          
+        </div>
+      </div>
+        <!-- <div class="page-content">
+            <div class="block-title">Hi {{user_name}}</div>
+            <div class="padding">
+                
+
+                
+                
+            </div>
+        </div> -->
+
+        <div class="tabs-swipeable-wrap">
+    <div class="tabs">
+      <div id="tab-1" class="page-content tab tab-active">
+        <div class="block">
+          
+
+            <div class="list search-list searchbar-found list media-list all-chat-lists">
+
+            </div>
+
+
+        </div>
+      </div>
+      <div id="tab-2" class="page-content tab">
+        <div class="block">
+          <div class="list search-list searchbar-found list media-list all-room-lists">
+
+        </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+    </div>
+
+</template>
+<script>
+    return {        
+        on: {
+            pageInit: function() {
+                var app = this.$app;
+                var $$ = this.$;                
+                var router = this.$router;        
+                var user_id = sessionStorage.getItem("user_id");
+
+                //console.log(user_id);
+                if(user_id == null){
+                    //console.log("I am here..");
+                    window.location = "index.html";
+                    return;
+                }
+
+                document.addEventListener("backbutton", onBackKeyDown, false);
+
+                function onBackKeyDown() {
+                    app.dialog.confirm('Are you sure you want exit?', function () {
+                        //window.plugins.appMinimize.minimize();
+                        //cordova.plugins.exit();
+                        navigator.app.exitApp();
+                    });
+                    // Handle the back button
+                    
+                }
+
+
+                $(".logout").on("click",function(){
+                    app.dialog.confirm('Are you sure you want to logout?', function () {
+                        sessionStorage.removeItem("user_id");
+                        sessionStorage.removeItem("chats_lists");
+                        sessionStorage.removeItem("username");
+                        sessionStorage.removeItem("name");
+                        sessionStorage.removeItem("email");
+                        sessionStorage.removeItem("phone");
+                        sessionStorage.removeItem("gender");
+                        sessionStorage.removeItem("bio");
+                        sessionStorage.removeItem("image");
+                        sessionStorage.removeItem("requests");
+                        sessionStorage.removeItem("room_lists");
+                        
+                        mainView.router.navigate("/login/",{});
+                    });
+                });
+
+                //clearInterval(myTimers);
+
+                $(".user-img").attr("src",server_upload_url+""+app_path+"users/thumb/"+sessionStorage.getItem("image"));
+                $(".user-name").html(sessionStorage.getItem("username"));
+                $(".user-status").html(sessionStorage.getItem("bio"));
+
+                updateStats();
+
+                var rooms = sessionStorage.getItem("room_lists");
+
+
+                var rooms_json = JSON.parse(rooms);
+
+                var students = rooms_json;
+                var htmls = "<div class='block-title'>Available Group Chats</div><ul>";
+                                            
+                for(var i = 0; i < students.length; i++){
+                    
+                    htmls += '<li>';
+                    htmls += '<a href="/chat-room/?id='+students[i].id+'&name='+students[i].name+'" class="item-link item-content">';                                
+                    htmls += '<div class="item-media students-img-li">';
+                    htmls += '<i class="icon material-icons md-only">chat</i>';
+                    htmls += '</div>';
+                    htmls += '<div class="item-inner">';
+                    htmls += '<div class="item-title">'                    
+                    htmls += students[i].name+'</div>';                    
+                    htmls += '</div></div></a></li>';
+                }
+
+                htmls += "</ul>";
+
+                //console.log(htmls);
+
+                $(".all-room-lists").html(htmls);
+
+
+                var chats_lists = sessionStorage.getItem("chats_lists");
+
+
+                var chats_json = JSON.parse(chats_lists);
+                var students = chats_json;
+
+                //console.log(students);
+
+                var htmls = "<div class='block-title'>My Chat Lists</div><ul>";
+                                                        
+                            for(var i = 0; i < students.length; i++){
+                                var img = server_upload_url+""+app_path+"users/thumb/"+students[i].image;
+                                var user_name = students[i].name;
+                                var username = students[i].username;
+                                var gender = students[i].gender;     
+                                var bio = students[i].bio;                           
+                                var id = students[i].id;
+                                htmls += '<li>';
+                                htmls += '<a href="/chat/?user_name='+user_name+'&username='+username+'&gender='+gender+'&bio='+bio+'&image='+img+'&id='+id+'" class="item-link item-content">';                                
+                                htmls += '<div class="item-media students-img-li">';
+                                htmls += '<img src="'+img+'" class="img-responsive img-circle" width="70">';
+                                htmls += '</div>';
+                                htmls += '<div class="item-inner">';
+                                htmls += '<div class="item-title">'
+                                htmls += '<div class="item-header">'+username+'</div>';
+                                htmls += students[i].name+'</div>';
+                                htmls += '<div class="item-footer">'+gender+'</div>';
+                                htmls += '</div></div></a></li>';
+                            }
+
+                            htmls += "</ul>";
+
+                            //console.log(htmls);
+
+                            $(".all-chat-lists").html(htmls);
+
+
+
+
+                function updateStats(){
+                    $.ajax({
+                      url: url,
+                      type: 'GET',
+                      dataType: 'json',
+                      timeout: 30000,
+                      data:{
+                        'stats': '',
+                        'user_id': sessionStorage.getItem("user_id")
+                      },
+                      success: function(f){
+                        sessionStorage.setItem("request",f.requests);
+                        var chats_lists = JSON.stringify(f.chats_lists);
+                        sessionStorage.setItem("chats_lists",chats_lists);
+                        $(".badge-request").html(f.requests);
+                      }
+                    });
+                }
+            }
+
+
+            
+
+        },
+        data: function () {        
+            return {
+                user_name: sessionStorage.getItem("name"),
+                email: sessionStorage.getItem("email"),
+                phone: sessionStorage.getItem("phone"),
+                gender: sessionStorage.getItem("gender"),
+                bio: sessionStorage.getItem("bio"),                
+                username: sessionStorage.getItem("username"),
+                requests: sessionStorage.getItem("requests"),
+                image: server_upload_url+""+app_path+"users/thumb/"+sessionStorage.getItem("image"),
+
+            }
+        },
+    }
+</script>
