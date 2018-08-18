@@ -6,7 +6,7 @@ var theme = 'md';
 
 // Init App
 var app = new Framework7({
-  id: 'ng.com.onlinemedia.mobilechat',
+  id: 'ng.com.onlinemedia.ontology',
   name: app_name,
   view: {
     pushState: true
