@@ -7,47 +7,34 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="theme-color" content="#2196f3">
   <!-- <meta http-equiv="Content-Security-Policy" content="default-src * 'self' 'unsafe-inline' 'unsafe-eval' data: gap:"> -->
-  <title>Mobile Chat</title>
+  <title>Mobile Ontology</title>
   <link rel="stylesheet" href="css/framework7.min.css">
   <link rel="stylesheet" href="css/app.css">  
   <link rel="stylesheet" href="lib/upload/fine-uploader-new.min.css">
   <link rel="icon" href="img/icon.png">
 
 </head>
-<body class="" id="main-body" onload="updateColor();">
+<body class="color-theme-green" id="main-body">
 
   <div id="app">
     <div class="statusbar"></div>
     <div class="panel panel-left panel-cover">
       <div class="page">
         <div class="page-content">
-          <div class="block-title" style="white-space: unset;">
-              <div class="row">
-                <div class="col-30" style="padding-top: 20px;">
-                  <img src="" class="img-responsive user-img img-circle" width="100">
-                </div>
-                <div class="col-70">
-                  <h5><span class="user-name"></span></h5>
-                  <p class="user-status">
-                    
-                  </p>
-                </div>
-              </div>
-          </div>                    
+
+          <h3 class="logo-text" style="margin-top: 30px;">Mobile Ontology</h3>                            
           <div class="list links-list">
             <ul>
               <li>
-                <a href="/friends/" class="panel-close"> Friends</a>
+                <a href="/search/" class="panel-close"> Search Herbs</a>
               </li>
               <li>
-                <a href="/find-friends/" class="panel-close"> Find Friends</a>
+                <a href="/saved/" class="panel-close"> Saved Herbs</a>
               </li>
               <li>
                 <a href="/profile/" class="panel-close"> Profile</a>
               </li>
-              <li>
-                <a href="/settings/" class="panel-close"> Settings</a>
-              </li>
+              
               <li>
                 <a href="/about/" class="panel-close"> About</a>
               </li>
@@ -69,27 +56,25 @@
           
           <div id="splashs" class="block">
             <div class="center" style="text-align:center; margin-top:30px;">
-              <img src="img/icon.png" alt="" class="img-responsive">
-              <h3>
-                Mobile Chat
-              </h3>
-
+              <img src="img/icon.png" alt="" class="img-responsive" width="200">            
               <h4>
-                <strong>Designed</strong> by Ajao Aishat Adeola
-                <br>
-                HC201602914
+                <strong>Supervised</strong> by Mr. Hammed M.A
               </h4>
 
               <h4>
-                <strong>Supervised</strong> by Mr. Longe O.L
-              </h4>              
+                <strong>Designed</strong> by Alao Khairat Olaide
+                <br>
+                HC201504153
+              </h4>
+
+                            
             </div>
 
 
             <div class="block">
               Already a member?
                 <div class="row">
-                  <a class="button button-outline button-round col" href="/login/"> <i class="icon material-icons md-only">person</i> Login</a>
+                  <a class="button button-outline button-fill button-round col" href="/login/"> <i class="icon material-icons md-only">person</i> Login</a>
                   <!-- <a class="button button-outline button-round col" href="/register/"> <i class="icon material-icons md-only">person</i> Sign Up</a> -->
                 </div>                           
             </div>
@@ -97,7 +82,7 @@
             <div class="block">
               New User?
               <div class="row">
-                  <a class="button button-outline button-round col" href="/register/"> <i class="icon material-icons md-only">person</i> Sign Up</a>
+                  <a class="button button-outline button-fill button-round col" href="/register/"> <i class="icon material-icons md-only">person</i> Sign Up</a>
               </div>
             </div>
           
@@ -113,7 +98,6 @@
   <!-- <script type="text/javascript" src="cordova.js"></script> -->
   <!-- <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="cordova_plugins.js"></script> -->
-  <script type="text/javascript" src="lib/upload/fine-uploader.min.js"></script>
   <script src="js/settings.js"></script>
   <script src="js/routes.js"></script>
   <script src="js/app.js"></script>

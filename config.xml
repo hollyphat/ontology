@@ -3,13 +3,13 @@
 <!-- config.xml reference: https://build.phonegap.com/docs/config-xml -->
 <widget xmlns     = "http://www.w3.org/ns/widgets"
         xmlns:gap = "http://phonegap.com/ns/1.0"
-        id        = "ng.com.onlinemedia.mobilechat"
+        id        = "ng.com.onlinemedia.ontology"
         version   = "1.0.2">
 
-    <name>Mobile Chat</name>
+    <name>Mobile Ontology</name>
 
     <description>
-        Mobile Chatting Application
+        Mobile Ontology Application
     </description>
 
     <author href="http://onlinemedia.com.ng" email="admin@onlinemedia.com.ng">
